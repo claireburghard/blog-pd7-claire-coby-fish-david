@@ -29,7 +29,7 @@ def index():
         button = request.form["b"]
         name = request.form["name"]
         title = request.form["title"]
-        blogpost = request.form["blogpost"]
+        blogpost = request.form["blog"]
         if button=="cancel":
             return render_template("index.html")
         else:
