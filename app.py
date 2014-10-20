@@ -4,14 +4,13 @@ import csv
 
 app = Flask(__name__)
 
-#initialization 
-conn = sqlite3.connect("test.db")
+#set up (this should go into a different file later
+conn = sqlite3.connect("database.db")
 c = conn.cursor()
-#q = "create table User (username TEXT, password TEXT)"
-t = "create table posts (name TEXT, title TEXT, blogpost TEXT)"
+#q = "create table User(username TEXT, password TEXT)"
+t = "create table if not exists posts(name TEXT, title TEXT, blogpost TEXT)"
 #c.execute(q)
 c.execute(t)
-conn.commit()
 
 #login page
 #@app.route("/", methods=["GET","POST"])
@@ -51,6 +50,8 @@ conn.commit()
 #index page
 @app.route("/", methods=["GET","POST"])
 def index():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
     if request.method=="GET":
         return render_template("index.html")
     else:
@@ -61,11 +62,15 @@ def index():
         if button=="cancel":
             return render_template("index.html")
         else:
-            q = add(name,title,blogpost)
+            q = "INSERT INTO posts VALUES("
+            q += "'" + name + "',"
+            q += "'" + title + "',"
+            q += "'" + blogpost + "')"
             c.execute(q)
-            conn.commit()
             link = "<a href='http://localhost:5000/'" + title + ">here</a>"
-            return render_template("postadded.html",link=link)
+            return render_template("postadded.html",
+                                   name-name,
+                                   link=link)
 
 
 #def add_user(username, password):
@@ -86,13 +91,7 @@ def index():
 #    else:
 #        return "Valid"
 
-
-def add(n,t,b):
-    q = "INSERT INTO posts VALUES("
-    q += n + ","
-    q += t + ","
-    q += b + ")"
-    return q
+    
 
 if __name__=="__main__":
     app.debug = True
