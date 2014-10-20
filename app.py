@@ -10,7 +10,7 @@ def init_db():
     q = "create table User (username text, password text)"
     t = "create table posts (name TEXT, title TEXT, blogpost TEXT)"
     c.execute(q)
-    #c.execute(t)
+    c.execute(t)
     conn.commit()
 
 #login page
@@ -26,7 +26,11 @@ def login():
         if button == "Login":
             validity = authenticate(username, password)
             if validity == "Valid":
+<<<<<<< HEAD
                 index(username)
+=======
+                return index(username)
+>>>>>>> 7e7556183ccadf02d7748b850f95200c5c4e4195
             else:
                 return render_template("login.html", message = "Username/ Password Invalid")
         if button == "Sign_Up":
@@ -40,7 +44,11 @@ def index(name):
         return render_template("index.html")
     else:
         button = request.form["b"]
+<<<<<<< HEAD
         name = request.form["name"]
+=======
+        name = name
+>>>>>>> 7e7556183ccadf02d7748b850f95200c5c4e4195
         title = request.form["title"]
         blogpost = request.form["blog"]
         if button=="cancel":
@@ -71,12 +79,21 @@ def authenticate(username, password):
 
 
 def add(n,t,b):
+<<<<<<< HEAD
     q = "INSERT INTO posts VALUES("
     q += n + ","
     q += t + ","
     q += b + ")"
     c.execute(q)
     conn.commit()
+=======
+   q = "INSERT INTO posts VALUES("
+   q += n + ","
+   q += t + ","
+   q += b + ")"
+        c.execute(q)
+        conn.commit()
+>>>>>>> 7e7556183ccadf02d7748b850f95200c5c4e4195
 
 if __name__=="__main__":
     app.debug = True
