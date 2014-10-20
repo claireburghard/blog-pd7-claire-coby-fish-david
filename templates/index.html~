@@ -9,12 +9,14 @@
 	margin-top:1px;
    margin-bottom:1px;
    }
+   button{
+   }
    #info{
    margin:0px auto;
    width:55%
    }
    #actual-blog{
-   height: 500;
+   height: 460;
    width:100%
 }
  </style>
@@ -32,7 +34,9 @@
       <form method="POST" class="pure-form pure-form-stacked">
 	  <input id="info" type="text" align="center" name="name" placeholder="Name">
 	  <input id="info" type="text" name="title" placeholder="Title">
-	  <input id="actual-blog" type="text" name="blog" placeholder="Enter your blog!">
+	  <textarea id="actual-blog" type="text" name="blog" placeholder="Enter your blog!"></textarea>
+	  <button class="pure-button pure-button-active center" type="submit" name="b" value="Submit"> Submit </button>
+	  <button class="pure-button pure-button-active center" type="cancel" name="b" value="Clear"> Clear </button>
       </form>
     </div>
   </div>

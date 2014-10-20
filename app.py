@@ -18,7 +18,7 @@ def init_db():
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method=="GET":
-        return render_template("login.html")
+        return render_template("login.html", message = "")
     else:
         username = request.form["username"]
         password = request.form["password"]
@@ -26,12 +26,12 @@ def login():
         if button == "Login":
             validity = authenticate(username, password)
             if validity == "Valid":
-                return render_template("index.html")
+                return render_template("index.html", name = username)
             else:
-                return "Invalid"
+                return render_template("login.html", message = "Username/ Password Invalid")
         if button == "Sign_Up":
             add_user(username, password)
-            return render_template("login.html")
+            return render_template("login.html", message = "Account Created")
 
 #index page
 #@app.route("/index", methods=["GET","POST"])
@@ -63,7 +63,7 @@ def add_user(username, password):
 def authenticate(username, password):
     conn = sqlite3.connect("test.db")
     c = conn.cursor()
-    c.execute("SELECT * FROM User WHERE username = '%s'" % username)
+    c.execute("SELECT * FROM User WHERE username = '%s'" % username + "and password = '%s'" % password)
     if c.fetchone() is None:
      return "Invalid"
     else:
