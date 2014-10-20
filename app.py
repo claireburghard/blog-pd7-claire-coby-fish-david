@@ -33,9 +33,24 @@ def login():
 >>>>>>> 7e7556183ccadf02d7748b850f95200c5c4e4195
             else:
                 return render_template("login.html", message = "Username/ Password Invalid")
-        if button == "Sign_Up":
+        if button == "Register":
+            return redirect(url_for('register'))
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+        if request.method=="GET":
+        return render_template("register.html", message = "")
+    else:
+        username = request.form["username"]
+        password = request.form["password"]
+        confirm = request.form["confirm_password"]
+        name = request.form["name"]
+        if (confirm == password):
             add_user(username, password)
-            return render_template("login.html", message = "Account Created")
+            return redirect(url_for('login'))
+        else:
+            return render_template("register.html", message = "Password doesn't match confirmation")
 
 #index page
 @app.route("/index/<name>", methods=["GET","POST"])
