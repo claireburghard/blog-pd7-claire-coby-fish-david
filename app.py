@@ -7,7 +7,7 @@ app = Flask(__name__)
 conn = sqlite3.connect("database.db")
 c = conn.cursor()
 q = "create table if not exists User(username TEXT, password TEXT)"
-t = "create table if not exists posts(name TEXT, title TEXT, blogpost TEXT)"
+t = "create table if not exists posts(name TEXT, title TEXT, blogpost TEXT, link TEXT)"
 c.execute(q)
 c.execute(t)
 conn.commit()
@@ -19,11 +19,12 @@ def list_posts():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute("SELECT * FROM posts")
-    for row in c.fetchall():
-        print row
+    links = ""
+    for l in c.fetchall():
+        links += l[3]
     conn.commit()
     conn.close()
-    return render_template("mainpage.html")
+    return render_template("mainpage.html", links = links)
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -36,7 +37,7 @@ def login():
         if button == "Login":
             validity = authenticate(username, password)
             if validity == "Valid":
-                return redirect(url_for('index', name=username))
+                return redirect(url_for('index'))
             else:
                 return render_template("login.html", message = "Username/Password Invalid")
         else:
@@ -58,10 +59,11 @@ def register():
             return render_template("register.html", message = "Password doesn't match confirmation")
 
 #index page
-@app.route("/index/<name>", methods=["GET","POST"])
-def index(name):
+@app.route("/index", methods=["GET","POST"])
+def index():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
+    name = "Needs Fixing"
     if request.method=="GET":
         return render_template("index.html", name=name)
     else:
@@ -69,19 +71,29 @@ def index(name):
         name = request.form["name"]
         title = request.form["title"]
         blogpost = request.form["blog"]
+        link = "localhost:5000/ind/" + title.replace(" ", "_")
         if button=="cancel":
             return render_template("index.html")
         else:
             q = "INSERT INTO posts VALUES("
             q += "'" + name + "',"
             q += "'" + title + "',"
-            q += "'" + blogpost + "')"
+            q += "'" + blogpost + "',"
+            q += "'" + link +  "')"
             c.execute(q)
             conn.commit()
             conn.close()
             #link = "<a href='http://localhost:5000/'" + title + ">here</a>"
             posts = get_posts()
             return render_template("postadded.html", name=name, posts=posts)
+
+@app.route("/ind/<post_title>", methods=["GET", "POST"])
+def postlink(post_title):
+    if request.method == "GET":
+        title = post_title.replace("_", " ")
+        blogpost = getpost(title)
+        return render_template("posts.html", title=title, blogpost = blogpost)
+    #WRITE POST METHODS!!
 
 def add_user(username, password):
     conn = sqlite3.connect('database.db')
@@ -118,6 +130,16 @@ def get_posts():
         test_print = test_print + r[2] + "<br>"
     conn.close()
     return test_print
+
+#for retrieving specific post
+def getpost(title):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    d = "SELECT blogpost FROM posts WHERE title = '%s'" + title
+    result = c.execute(d)
+    conn.commit()
+    conn.close()
+    return result
 
 if __name__=="__main__":
     app.debug = True
