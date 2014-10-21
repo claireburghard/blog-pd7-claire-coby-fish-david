@@ -32,7 +32,7 @@ def login():
         if button == "Login":
             validity = authenticate(username, password)
             if validity == "Valid":
-                return redirect(url_for('index'))
+                return redirect(url_for('index', name=username))
             else:
                 return render_template("login.html", message = "Username/Password Invalid")
         else:
@@ -54,12 +54,12 @@ def register():
             return render_template("register.html", message = "Password doesn't match confirmation")
 
 #index page
-@app.route("/index", methods=["GET","POST"])
-def index():
+@app.route("/index/<name>", methods=["GET","POST"])
+def index(name):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     if request.method=="GET":
-        return render_template("index.html")
+        return render_template("index.html", name=name)
     else:
         button = request.form["b"]
         name = request.form["name"]
