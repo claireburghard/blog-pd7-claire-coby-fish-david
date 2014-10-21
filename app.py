@@ -13,6 +13,15 @@ c.execute(t)
 
 #login page
 @app.route("/", methods=["GET","POST"])
+def list_posts():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    conn.execute("SELECT * FROM database.posts")
+    for row in conn.fetchall():
+        print row
+
+    return render_template("mainpage.html")
+
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method=="GET":
@@ -99,7 +108,6 @@ def get_posts():
     for r in result:
         test_print = test_print + r + "<br>"
     return test_print
-
 
 if __name__=="__main__":
     app.debug = True
