@@ -16,10 +16,9 @@ c.execute(t)
 def list_posts():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
-    conn.execute("SELECT * FROM database.posts")
-    for row in conn.fetchall():
+    conn.execute("SELECT * FROM posts")
+    for row in c.fetchall():
         print row
-
     return render_template("mainpage.html")
 
 @app.route("/login", methods=["GET","POST"])
