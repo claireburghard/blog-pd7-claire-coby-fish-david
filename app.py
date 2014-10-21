@@ -92,6 +92,7 @@ def get_posts():
     d = """
     SELECT name,title,blogpost
     FROM posts
+    WHERE name = 'CLAIRE'
     """
     result = c.execute(d)
     test_print = "ARGH!"
@@ -104,4 +105,3 @@ if __name__=="__main__":
     app.debug = True
     app.run()
 
-#palette: http://paletton.com/#uid=2060u0koitjeLFUjXw6sHpov2k7
