@@ -1,16 +1,44 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>LOGIN</title>
+<head>
+<title>LOGIN</title>
+ <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+ <style type="text/css">
+   h1{
+   color: #ff9989;
+   font-size:36px;
+   text-align: center;
+   margin-top:25%;
+   }
+   button{
+   }
+   #info{
+   margin:5px auto;
+   width:65%
+   }
+   #actual-blog{
+   height: 460;
+   width:100%
+   }
+ </style>
   </head>
-  <body>
-    <h1>LOGIN</h1>
-    <form method="POST">
-      <input type="text" name="username" placeholder="USERNAME">
-      <input type="password" name="password" placeholder="Password">
-      <button type="submit" name="b" value="Login">Login</button>
-      <button type="submit" name="b" value="Register">Register</button>
+  <body style="background-color: #e95038">
+    <div class="pure-g">
+    <div class="pure-u-1-5"></div>
+    <div class="pure-u-3-5">
+    <br>
+    <h1>Login</h1>
+    <form method="POST" class="pure-form pure-form-stacked">
+      <input id="info" type="text" name="username" placeholder="Username">
+      <input id="info" type="password" name="password" placeholder="Password">
+      <center>
+      <button style="color: #2aad52" class="pure-button pure-button-active center" type="submit" name="b" value="Login">Login</button>
+      <button style="color: #2aad52" class="pure-button pure-button-active center" type="submit" name="b" value="Register">Register</button>
     </form>
     <p>{{message}}</p>
+    </center>
+    </div>
+    <div class="pure-u-1-5"></div>
   </body>
   
 </html>
