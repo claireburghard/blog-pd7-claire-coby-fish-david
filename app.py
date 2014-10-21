@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import csv
 
@@ -24,12 +24,11 @@ def login():
         if button == "Login":
             validity = authenticate(username, password)
             if validity == "Valid":
-                index(username)
+                return redirect(url_for('index'))
             else:
-                return render_template("login.html", message = "Username/ Password Invalid")
-                if button == "Register":
-                    return redirect(url_for('register'))
-
+                return render_template("login.html", message = "Username/Password Invalid")
+        else:
+            return redirect(url_for('register'))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -47,7 +46,7 @@ def register():
             return render_template("register.html", message = "Password doesn't match confirmation")
 
 #index page
-@app.route("/", methods=["GET","POST"])
+@app.route("/index", methods=["GET","POST"])
 def index():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
@@ -67,11 +66,11 @@ def index():
             q += "'" + blogpost + "')"
             c.execute(q)
             #link = "<a href='http://localhost:5000/'" + title + ">here</a>"
-            return render_template("postadded.html",
-                                   name=name)
+            posts = get_posts()
+            return render_template("postadded.html", name=name, posts=posts)
 
 def add_user(username, password):
-    conn = sqlite3.connect('test.db')
+    conn = sqlite3.connect('database.db')
     c=conn.cursor();
     BASE="INSERT INTO User VALUES('" + username +"', '" + password + "')"
     c.execute(BASE)
@@ -79,7 +78,7 @@ def add_user(username, password):
     return BASE + "user added"
 
 def authenticate(username, password):
-    conn = sqlite3.connect("test.db")
+    conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute("SELECT * FROM User WHERE username = '%s'" % username + "and password = '%s'" % password)
     if c.fetchone() is None:
@@ -87,7 +86,19 @@ def authenticate(username, password):
     else:
         return "Valid"
 
-    
+def get_posts():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    d = """
+    SELECT name,title,blogpost
+    FROM posts
+    """
+    result = c.execute(d)
+    test_print = "ARGH!"
+    for r in result:
+        test_print = test_print + r + "<br>"
+    return test_print
+
 
 if __name__=="__main__":
     app.debug = True
