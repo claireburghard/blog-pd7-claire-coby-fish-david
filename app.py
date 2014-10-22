@@ -4,6 +4,8 @@ import csv
 
 app = Flask(__name__)
 
+cur_user = ""
+
 conn = sqlite3.connect("database.db")
 c = conn.cursor()
 q = "create table if not exists User(username TEXT, password TEXT)"
@@ -14,30 +16,36 @@ conn.commit()
 conn.close()
 
 #login page
-@app.route("/", methods=["GET","POST"])
-def list_posts():
-    conn = sqlite3.connect("database.db")
-    c = conn.cursor()
-    c.execute("SELECT * FROM posts")
-    links = ""
-    for l in c.fetchall():
-        links += l[3]
-    conn.commit()
-    conn.close()
-    return render_template("mainpage.html", links = links)
+@app.route("/home", methods=["GET","POST"])
+def home():
+    if request.method=="GET":
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        c.execute("SELECT * FROM posts")
+        links = ""
+        for l in c.fetchall():
+            links += l[3]
+        conn.commit()
+        conn.close()
+        return render_template("mainpage.html", links = links, name = cur_user)
+    else:
+        return redirect(url_for('index'))
 
+@app.route("/", methods=["GET","POST"])
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method=="GET":
         return render_template("login.html", message = "")
     else:
+        global cur_user
         username = request.form["username"]
         password = request.form["password"]
         button = request.form["b"]
         if button == "Login":
             validity = authenticate(username, password)
             if validity == "Valid":
-                return redirect(url_for('index'))
+                cur_user = username
+                return redirect(url_for('home'))
             else:
                 return render_template("login.html", message = "Username/Password Invalid")
         else:
@@ -63,12 +71,11 @@ def register():
 def index():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
-    name = "Needs Fixing"
+    name = cur_user
     if request.method=="GET":
         return render_template("index.html", name=name)
     else:
         button = request.form["b"]
-        name = request.form["name"]
         title = request.form["title"]
         blogpost = request.form["blog"]
         link = "localhost:5000/ind/" + title.replace(" ", "_")
@@ -76,7 +83,7 @@ def index():
             return render_template("index.html")
         else:
             q = "INSERT INTO posts VALUES("
-            q += "'" + name + "',"
+            q += "'" + cur_user + "',"
             q += "'" + title + "',"
             q += "'" + blogpost + "',"
             q += "'" + link +  "', '')"
@@ -84,22 +91,23 @@ def index():
             conn.commit()
             conn.close()
             posts = get_posts()
-            return render_template("postadded.html", name=name, posts=posts)
+            return redirect(url_for('home'))
 
 @app.route("/ind/<post_title>", methods=["GET", "POST"])
 def postlink(post_title):
     title = post_title.replace("_", " ")
     blogpost = getpost(title)
     comments = getcomments(title)
+    name = getname(title)
     if request.method == "GET":
-        return render_template("posts.html", title=title, blogpost = blogpost, comments = comments)
+        return render_template("posts.html", title=title, blogpost = blogpost, name=name, comments = comments)
     else:
         comments = getcomments(title)
         #Now add the comment
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         comment = request.form["comment"]
-        comments += comment
+        comments += comment + " - " + cur_user + ' '
         q = "UPDATE posts SET comments = '%s'" %comments + "WHERE title = '%s'" % title
         c.execute(q)
         conn.commit()
@@ -136,7 +144,7 @@ def get_posts():
     """
     result = c.execute(d)
     conn.commit()
-    test_print = "ARGH!"
+    test_print = ""
     for r in result:
         test_print = test_print + r[2] + "<br>"
     conn.close()
@@ -147,6 +155,19 @@ def getpost(title):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     d = "SELECT blogpost FROM posts WHERE title = '%s'" % title
+    result = c.execute(d)
+    ret = ""
+    for r in result:
+        ret += r[0]
+    conn.commit()
+    conn.close()
+    return ret
+
+#for retrieving a post writer's name
+def getname(title):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    d = "SELECT name FROM posts WHERE title = '%s'" % title
     result = c.execute(d)
     ret = ""
     for r in result:

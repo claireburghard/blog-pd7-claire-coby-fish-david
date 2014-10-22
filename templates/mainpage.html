@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-{% block content %} 
+ 
 <html lang="en">
-
+ 
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="css/style.css">
     <link href="images/favicon.ico" rel="shortcut icon">
-    <title>First Blog</title>
+    <title>{{name}}</title>
 </head>
  
-<body>
-{% for val in links.split('localhost:5000/ind/') %} 
-
-<p>{{val}}</p>
-  <!--{{links.split('localhost:5000/ind/')}} -->
-
-
-</p>
- {% endfor %}
+<body>	
+<h1> Welcome {{name}}</h1> 
+<p> {{links}}</p>
+<form method="POST">
+  <button type="submit" name="b" value="New_Post">New Post</button>
+</form>
 </body>
-{% endblock %}     
+     
 </html>
