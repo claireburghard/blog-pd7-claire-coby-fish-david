@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% block content %} 
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -38,12 +39,16 @@
  </style>
 </head>
 <body>	
-<h1>Welcome {{name}}</h1> 
-<p>{{links}}</p>
+<h1>Welcome {{name}}</h1>
+{% for val in links.split('localhost:5000/ind/') %}
+
+<p><a href="localhost:5000/ind/{{val}}"> {{val}} </a></p>
 <center>
-<form method="POST">
-  <button class="pure-button pure-button-active center" type="submit" name="b" value="New_Post">New Post</button>
 </form>
 </center>
+{% endfor %}
+<form method="POST">
+  <button class="pure-button pure-button-active center" type="submit" name="b" value="New_Post">New Post</button>
 </body>
+{% endblock %}
 </html>
