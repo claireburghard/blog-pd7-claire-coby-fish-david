@@ -1,19 +1,46 @@
 <!DOCTYPE html>
- 
 <html lang="en">
- 
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
     <link href="images/favicon.ico" rel="shortcut icon">
     <title>{{name}}</title>
+    <style type="text/css">
+   body{
+   background-color: #ff7660;
+   }    
+   h1{
+   color: #e95038;
+   font-size:48px;
+   text-align: center;
+   margin-top:5%;
+   }
+   p{
+   color: #e95038;
+   font-size:24px;
+   text-align: center;
+   }
+   button{
+   margin:5px auto;
+   color: #2aad52
+   }
+   #info{
+   margin:5px auto;
+   width:65%
+   }
+   #actual-blog{
+   height: 460;
+   width:100%
+}
+ </style>
 </head>
- 
 <body>	
-<h1> Welcome {{name}}</h1> 
-<p> {{links}}</p>
+<h1>Welcome {{name}}</h1> 
+<p>{{links}}</p>
+<center>
 <form method="POST">
-  <button type="submit" name="b" value="New_Post">New Post</button>
+  <button "submit" name="b" value="New_Post">New Post</button>
 </form>
+</center>
 </body>
 </html>
