@@ -11,6 +11,8 @@
    margin-top:5%;
    }
    button{
+   margin:5px auto;
+   color: #2aad52
    }
    #info{
    margin:5px auto;
@@ -32,8 +34,8 @@
 	  <input id="info" type="text" name="title" placeholder="Title">
 	  <textarea id="actual-blog" type="text" name="blog" placeholder="Enter your blog!"></textarea>
 	  <center>
-	  <button style="color: #2aad52" class="pure-button pure-button-active center" type="submit" name="b" value="Submit"> Submit </button>
-	  <button style="color: #2aad52" class="pure-button pure-button-active center" type="cancel" name="b" value="Clear"> Clear </button>
+	  <button class="pure-button pure-button-active center" type="submit" name="b" value="Submit"> Submit </button>
+	  <button class="pure-button pure-button-active center" type="cancel" name="b" value="Clear"> Clear </button>
 	  </center>
       </form>
     </div>
