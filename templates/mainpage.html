@@ -1,7 +1,7 @@
 <!DOCTYPE html>
- 
+{% block content %} 
 <html lang="en">
- 
+
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="css/style.css">
@@ -10,10 +10,14 @@
 </head>
  
 <body>
-	
-<p> {{links}}
+{% for val in links.split('localhost:5000/ind/') %} 
+
+<p>{{val}}</p>
+  <!--{{links.split('localhost:5000/ind/')}} -->
+
+
 </p>
- 
+ {% endfor %}
 </body>
-     
+{% endblock %}     
 </html>
