@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
     <link href="images/favicon.ico" rel="shortcut icon">
-    <title>{{name}}</title>
+    <title>Public Posts</title>
     <style type="text/css">
    body{
    background-color: #CA2E15;
@@ -39,7 +39,7 @@
  </style>
 </head>
 <body>	
-<h1>Welcome {{name}}</h1>
+<h1>Public Posts</h1>
 {% for val in links.split('localhost:5000/ind/') %}
 
 <p><a href="localhost:5000/ind/{{val}}"> {{val}} </a></p>
@@ -48,8 +48,7 @@
 </center>
 {% endfor %}
 <form method="POST">
-  <button class="pure-button pure-button-active center" type="submit" name="b" value="New_Post">New Post</button>
-<button class="pure-button pure-button-active center" type="submit" name="b" value="Public_Posts">Public Posts</button>
+<button class="pure-button pure-button-active center" type="submit" name="b" value="Public_Posts">Back to Home</button>
 </body>
 {% endblock %}
 </html>

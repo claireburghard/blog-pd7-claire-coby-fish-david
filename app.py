@@ -19,7 +19,7 @@ def home():
     if request.method=="GET":
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
-        c.execute("SELECT * FROM posts")
+        c.execute("SELECT * FROM posts WHERE name = '%s'" % cur_user)
         links = ""
         for l in c.fetchall():
             links += l[3]
@@ -27,7 +27,34 @@ def home():
         conn.close()
         return render_template("mainpage.html", links = links, name = cur_user)
     else:
-        return redirect(url_for('index'))
+        button = request.form["b"]
+        if button == "New_Post":
+            return redirect(url_for('index'))
+        else:
+            conn = sqlite3.connect("database.db")
+            c = conn.cursor()
+            c.execute("SELECT * FROM posts WHERE name != '%s'" % cur_user)
+            links = ""
+            for l in c.fetchall():
+                links += l[3]
+            conn.commit()
+            conn.close()
+            return redirect(url_for('dashboard'))
+
+@app.route("/dashboard", methods=["GET","POST"])
+def dashboard():
+    if request.method=="GET":
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        c.execute("SELECT * FROM posts WHERE name != '%s'" % cur_user)
+        links = ""
+        for l in c.fetchall():
+            links += l[3]
+        conn.commit()
+        conn.close()
+        return render_template("dashboard.html", links = links)
+    else:
+        return redirect(url_for('home'))
 
 @app.route("/", methods=["GET","POST"])
 @app.route("/login", methods=["GET","POST"])
