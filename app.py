@@ -83,7 +83,6 @@ def index():
             c.execute(q)
             conn.commit()
             conn.close()
-            #link = "<a href='http://localhost:5000/'" + title + ">here</a>"
             posts = get_posts()
             return render_template("postadded.html", name=name, posts=posts)
 
@@ -135,11 +134,14 @@ def get_posts():
 def getpost(title):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
-    d = "SELECT blogpost FROM posts WHERE title = '%s'" + title
+    d = "SELECT blogpost FROM posts WHERE title = '%s'" % title
     result = c.execute(d)
+    ret = ""
+    for r in result:
+        ret += r[0]
     conn.commit()
     conn.close()
-    return result
+    return ret
 
 if __name__=="__main__":
     app.debug = True
