@@ -4,8 +4,6 @@ import csv
 
 app = Flask(__name__)
 
-cur_user = ""
-
 conn = sqlite3.connect("database.db")
 c = conn.cursor()
 q = "create table if not exists User(username TEXT, password TEXT)"
@@ -112,7 +110,7 @@ def postlink(post_title):
         c.execute(q)
         conn.commit()
         conn.close()
-        return render_template("posts.html", title=title, blogpost = blogpost, comments = comments)
+        return render_template("posts.html", title=title, blogpost = blogpost, name=name, comments = comments)
 
 def add_user(username, password):
     conn = sqlite3.connect('database.db')
@@ -192,5 +190,6 @@ def getcomments(title):
 
 if __name__=="__main__":
     app.debug = True
+    cur_user = ""
     app.run()
 
