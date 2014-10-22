@@ -18,7 +18,7 @@
    }
    p{
    color: #E6513A;
-   font-size:24px;
+   font-size:36px;
    text-align: center;
    }
    input{
@@ -35,7 +35,13 @@
    #actual-blog{
    height: 460;
    width:100%
-}
+   }
+   a{
+   color: #4CBB6E;
+   }
+   a:hover{
+   color: #2BAA51;
+   }
  </style>
 </head>
 <body>	
@@ -45,10 +51,10 @@
 <p><a href="localhost:5000/ind/{{val}}"> {{val}} </a></p>
 <center>
 </form>
-</center>
 {% endfor %}
 <form method="POST">
 <button class="pure-button pure-button-active center" type="submit" name="b" value="Public_Posts">Back to Home</button>
+</center>
 </body>
 {% endblock %}
 </html>

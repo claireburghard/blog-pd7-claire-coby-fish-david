@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
     <link href="images/favicon.ico" rel="shortcut icon">
-    <title>{{name}}</title>
+    <title>Public Posts</title>
     <style type="text/css">
    body{
    background-color: #CA2E15;
@@ -18,7 +18,7 @@
    }
    p{
    color: #E6513A;
-   font-size:32px;
+   font-size:24px;
    text-align: center;
    }
    input{
@@ -35,34 +35,20 @@
    #actual-blog{
    height: 460;
    width:100%
-   }
-   a{
-   color: #4CBB6E;
-   }
-   a:hover{
-   color: #2BAA51;
-   }
+}
  </style>
 </head>
-<body>
-<div class="pure-g">	
-<div class="pure-u-1-5"></div>
-<div  class="pure-u-3-5">
-<h1>Welcome, {{name}}!</h1>
+<body>	
+<h1>Public Posts</h1>
 {% for val in links.split('localhost:5000/ind/') %}
-<p><a href="localhost:5000/ind/{{val}}">{{val}}</a></p>
+
+<p><a href="localhost:5000/ind/{{val}}"> {{val}} </a></p>
 <center>
 </form>
 </center>
 {% endfor %}
-<center>
 <form method="POST">
-  <button class="pure-button pure-button-active center" type="submit" name="b" value="New_Post">New Post</button>
-<button class="pure-button pure-button-active center" type="submit" name="b" value="Public_Posts">Public Posts</button>
-</center>
-</div>
- <div class="pure-u-1-5"></div>
+<button class="pure-button pure-button-active center" type="submit" name="b" value="Public_Posts">Back to Home</button>
 </body>
-</div>
 {% endblock %}
 </html>

@@ -4,15 +4,21 @@
 <title>Home Page</title>
  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
  <style type="text/css">
+   body{
+   background-color: #2BAA51;
+   }   
    h1{
-   color: #ff7660;
+   color: #7D1100;
    font-size:36px;
    text-align: center;
    margin-top:5%;
+   } 
+   input{
+   margin:2px auto;
    }
    button{
    margin:5px auto;
-   color: #2aad52
+   color: #CA2E15;
    }
    #info{
    margin:5px auto;
@@ -24,7 +30,7 @@
 }
  </style>
 </head>
-<body style="background-color: #ca2e15">
+<body>
   <div class="pure-g">
     <div class="pure-u-1-5"></div>
     <div class="pure-u-3-5">
@@ -34,8 +40,8 @@
 	  <input id="info" type="text" name="title" placeholder="Title">
 	  <textarea id="actual-blog" type="text" name="blog" placeholder="Enter your blog!"></textarea>
 	  <center>
-	  <button class="pure-button pure-button-active center" type="submit" name="b" value="Submit"> Submit </button>
-	  <button class="pure-button pure-button-active center" type="cancel" name="b" value="Clear"> Clear </button>
+	  <button class="pure-button pure-button-active center" type="submit" name="b" value="Submit">Submit</button>
+	  <button class="pure-button pure-button-active center" type="cancel" name="b" value="Clear">Clear</button>
 	  </center>
       </form>
     </div>
