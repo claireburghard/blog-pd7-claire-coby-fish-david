@@ -1,4 +1,10 @@
 <html>
   <head><title>{{title}}</title></head>
   <body>
-    <p> Blog: {{blogpost}} </p></body></html>
+    <p> Blog: {{blogpost}}<br>
+    Comments: {{comments}}</p>
+    <form method="POST">
+      <input type="text" name="comment" placeholder="Comments?">
+      <button type="submit" name="b" value="Submit">Submit</button>
+  </body>
+</html>

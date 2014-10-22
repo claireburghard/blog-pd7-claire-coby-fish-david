@@ -7,7 +7,7 @@ app = Flask(__name__)
 conn = sqlite3.connect("database.db")
 c = conn.cursor()
 q = "create table if not exists User(username TEXT, password TEXT)"
-t = "create table if not exists posts(name TEXT, title TEXT, blogpost TEXT, link TEXT)"
+t = "create table if not exists posts(name TEXT, title TEXT, blogpost TEXT, link TEXT, comments TEXT)"
 c.execute(q)
 c.execute(t)
 conn.commit()
@@ -79,7 +79,7 @@ def index():
             q += "'" + name + "',"
             q += "'" + title + "',"
             q += "'" + blogpost + "',"
-            q += "'" + link +  "')"
+            q += "'" + link +  "', '')"
             c.execute(q)
             conn.commit()
             conn.close()
@@ -88,11 +88,23 @@ def index():
 
 @app.route("/ind/<post_title>", methods=["GET", "POST"])
 def postlink(post_title):
+    title = post_title.replace("_", " ")
+    blogpost = getpost(title)
+    comments = getcomments(title)
     if request.method == "GET":
-        title = post_title.replace("_", " ")
-        blogpost = getpost(title)
-        return render_template("posts.html", title=title, blogpost = blogpost)
-    #WRITE POST METHODS!!
+        return render_template("posts.html", title=title, blogpost = blogpost, comments = comments)
+    else:
+        comments = getcomments(title)
+        #Now add the comment
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        comment = request.form["comment"]
+        comments += comment
+        q = "UPDATE posts SET comments = '%s'" %comments + "WHERE title = '%s'" % title
+        c.execute(q)
+        conn.commit()
+        conn.close()
+        return render_template("posts.html", title=title, blogpost = blogpost, comments = comments)
 
 def add_user(username, password):
     conn = sqlite3.connect('database.db')
@@ -142,6 +154,20 @@ def getpost(title):
     conn.commit()
     conn.close()
     return ret
+
+#for retrieving a post's comments
+def getcomments(title):
+    #find old comments
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    q = "SELECT comments FROM posts WHERE title = '%s'" %title
+    coms = c.execute(q)
+    comments = ""
+    for c in coms:
+        comments += c[0]
+    conn.commit()
+    conn.close()
+    return comments
 
 if __name__=="__main__":
     app.debug = True
