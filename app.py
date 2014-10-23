@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 conn = sqlite3.connect("database.db")
 c = conn.cursor()
-q = "create table if not exists User(username TEXT, password TEXT)"
+q = "create table if not exists User(username TEXT, name TEXT, password TEXT)"
 t = "create table if not exists posts(name TEXT, title TEXT, blogpost TEXT, link TEXT, comments TEXT)"
 c.execute(q)
 c.execute(t)
@@ -25,7 +25,7 @@ def home():
             links += l[3]
         conn.commit()
         conn.close()
-        return render_template("mainpage.html", links = links, name = cur_user)
+        return render_template("mainpage.html", links = links, name = cur_name)
     else:
         button = request.form["b"]
         if button == "New_Post":
@@ -63,6 +63,7 @@ def login():
         return render_template("login.html", message = "")
     else:
         global cur_user
+        global cur_name
         username = request.form["username"]
         password = request.form["password"]
         button = request.form["b"]
@@ -70,6 +71,7 @@ def login():
             validity = authenticate(username, password)
             if validity == "Valid":
                 cur_user = username
+                cur_name = get_name(username)
                 return redirect(url_for('home'))
             else:
                 return render_template("login.html", message = "Username/Password Invalid")
@@ -86,7 +88,7 @@ def register():
         confirm = request.form["confirm_password"]
         name = request.form["name"]
         if (confirm == password):
-            add_user(username, password)
+            add_user(username,name,password)
             return redirect(url_for('login'))
         else:
             return render_template("register.html", message = "Password doesn't match confirmation")
@@ -96,7 +98,7 @@ def register():
 def index():
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
-    name = cur_user
+    name = cur_name
     if request.method=="GET":
         return render_template("index.html", name=name)
     else:
@@ -123,7 +125,7 @@ def postlink(post_title):
     title = post_title.replace("_", " ")
     blogpost = getpost(title)
     comments = getcomments(title)
-    name = getname(title)
+    name = cur_name
     if request.method == "GET":
         return render_template("posts.html", title=title, blogpost = blogpost, name=name, comments = comments)
     else:
@@ -132,17 +134,17 @@ def postlink(post_title):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         comment = request.form["comment"]
-        comments += comment + " - "  + cur_user + ' ' + "splittestholder123123"
+        comments += comment + " - "  + cur_name + ' ' + "splittestholder123123"
         q = "UPDATE posts SET comments = '%s'" %comments + "WHERE title = '%s'" % title
         c.execute(q)
         conn.commit()
         conn.close()
         return render_template("posts.html", title=title, blogpost = blogpost, name=name, comments = comments)
 
-def add_user(username, password):
+def add_user(username,name,password):
     conn = sqlite3.connect('database.db')
     c=conn.cursor();
-    BASE="INSERT INTO User VALUES('" + username +"', '" + password + "')"
+    BASE="INSERT INTO User VALUES('" + username +"', '" + name + "', '" +  password + "')"
     c.execute(BASE)
     conn.commit()
     conn.close()
@@ -180,6 +182,19 @@ def getpost(title):
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     d = "SELECT blogpost FROM posts WHERE title = '%s'" % title
+    result = c.execute(d)
+    ret = ""
+    for r in result:
+        ret += r[0]
+    conn.commit()
+    conn.close()
+    return ret
+
+#for retrieving a user's name
+def get_name(username):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    d = "SELECT name FROM User WHERE username = '%s'" % username
     result = c.execute(d)
     ret = ""
     for r in result:
