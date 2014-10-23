@@ -123,12 +123,9 @@ def index():
 
 @app.route("/ind/<post_title>", methods=["GET", "POST"])
 def postlink(post_title):
-    t = post_title.replace("_", " ")
-    title = '"""' + getback_apos(t) + '"""'
-    b = getpost(title)
-    blogpost = getback_apos(b)
-    c = getcomments(title)
-    comments = getback_apos(c)
+    title = post_title.replace("_", " ")
+    blogpost = getpost(title)
+    comments = getcomments(title)
     name = cur_name
     if request.method == "GET":
         return render_template("posts.html", title=title, blogpost=blogpost, name=name, comments=comments)
@@ -238,19 +235,10 @@ def replace_apos(text):
     new = ""
     for r in text:
         if r == "'":
-            new = new + "^"
+            new = new + ""
         else:
             new = new + r
     return new
-
-def getback_apos(text):
-    old = ""
-    for r in text:
-        if r =="^":
-            old = old + "'"
-        else:
-            old = old + r
-    return old
 
 if __name__=="__main__":
     app.debug = True
