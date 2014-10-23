@@ -137,7 +137,7 @@ def postlink(post_title):
     title = post_title.replace("_", " ")
     blogpost = getpost(title)
     comments = getcomments(title)
-    name = cur_name
+    name = get_name(getname(title))
     if request.method == "GET":
         return render_template("posts.html", title=title, blogpost=blogpost, name=name, comments=comments)
     else:
