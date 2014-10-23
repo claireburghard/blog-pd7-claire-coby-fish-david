@@ -111,9 +111,9 @@ def index():
         else:
             q = "INSERT INTO posts VALUES("
             q += "'" + cur_user + "',"
-            q += "'" + replace_apos(title) + "',"
-            q += "'" + replace_apos(blogpost) + "',"
-            q += "'" + replace_apos(link) +  "', '')"
+            q += "'" + title.replace("'", "") + "',"
+            q += "'" + blogpost.replace("'", "") + "',"
+            q += "'" + link.replace("'", "") +  "', '')"
             c.execute(q)
             conn.commit()
             conn.close()
@@ -233,15 +233,6 @@ def getcomments(title):
     conn.commit()
     conn.close()
     return comments
-
-def replace_apos(text):
-    new = ""
-    for r in text:
-        if r == "'":
-            new = new + "^"
-        else:
-            new = new + r
-    return new
 
 def getback_apos(text):
     old = ""
