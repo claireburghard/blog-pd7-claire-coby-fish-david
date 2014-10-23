@@ -54,10 +54,10 @@
     </center>
     <br>
     <p>{{message}}</p>
-    </div>
     </center>
     </div>
     <div class="pure-u-1-5"></div>
+  </div>
   </body>
   
 </html>
