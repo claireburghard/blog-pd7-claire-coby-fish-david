@@ -111,23 +111,27 @@ def index():
         else:
             q = "INSERT INTO posts VALUES("
             q += "'" + cur_user + "',"
-            q += "'" + title + "',"
-            q += "'" + blogpost + "',"
-            q += "'" + link +  "', '')"
+            q += "'" + replace_apos(title) + "',"
+            q += "'" + replace_apos(blogpost) + "',"
+            q += "'" + replace_apos(link) +  "', '')"
             c.execute(q)
             conn.commit()
             conn.close()
             posts = get_posts()
             return redirect(url_for('home'))
 
+
 @app.route("/ind/<post_title>", methods=["GET", "POST"])
 def postlink(post_title):
-    title = post_title.replace("_", " ")
-    blogpost = getpost(title)
-    comments = getcomments(title)
+    t = post_title.replace("_", " ")
+    title = '"""' + getback_apos(t) + '"""'
+    b = getpost(title)
+    blogpost = getback_apos(b)
+    c = getcomments(title)
+    comments = getback_apos(c)
     name = cur_name
     if request.method == "GET":
-        return render_template("posts.html", title=title, blogpost = blogpost, name=name, comments = comments)
+        return render_template("posts.html", title=title, blogpost=blogpost, name=name, comments=comments)
     else:
         comments = getcomments(title)
         #Now add the comment
@@ -229,6 +233,24 @@ def getcomments(title):
     conn.commit()
     conn.close()
     return comments
+
+def replace_apos(text):
+    new = ""
+    for r in text:
+        if r == "'":
+            new = new + "^"
+        else:
+            new = new + r
+    return new
+
+def getback_apos(text):
+    old = ""
+    for r in text:
+        if r =="^":
+            old = old + "'"
+        else:
+            old = old + r
+    return old
 
 if __name__=="__main__":
     app.debug = True
