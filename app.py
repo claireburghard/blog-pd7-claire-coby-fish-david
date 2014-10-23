@@ -132,7 +132,7 @@ def postlink(post_title):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         comment = request.form["comment"]
-        comments += comment + " - " + cur_user + ' '
+        comments += comment + " - "  + cur_user + ' ' + "splittestholder123123"
         q = "UPDATE posts SET comments = '%s'" %comments + "WHERE title = '%s'" % title
         c.execute(q)
         conn.commit()
